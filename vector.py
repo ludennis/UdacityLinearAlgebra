@@ -1,4 +1,5 @@
-from math import sqrt
+from math import sqrt,acos,pi
+
 class Vector(object):
     def __init__(self, coordinates):
         try:
@@ -29,24 +30,44 @@ class Vector(object):
         return [other * v for v in self.coordinates]
 
     def magnitude(self):
-        coordinates_squared=[x**2 for x in self.coordinates]
-        return sqrt(sum(coordinates_squared))
+        return sqrt(sum([x**2 for x in self.coordinates]))
 
     def normalize(self):
         try:
             mag = self.magnitude()
-            return self * (1 / mag)
+            return Vector(self * (1 / mag))
         except ZeroDivisionError:
             raise Exception('Cannot normalize the zero vector')
 
-vector1 = Vector([-0.221,7.437])
-print (vector1.magnitude())
+    def inner(self,other):
+        return sum([v1*v2 for v1,v2 in zip(self.coordinates,other.coordinates)])
 
-vector2 = Vector([8.813,-1.331,-6.247])
-print (vector2.magnitude())
+    def angle(self,other,degree=False):
+        try:
+            angle_in_rad = acos((self.normalize()).inner(other.normalize()))
+            if degree:
+                return angle_in_rad*180/pi
+            else:
+                return angle_in_rad
+        except ZeroDivisionError:
+            raise Exception('Cannot find angle of zero vector')
 
-vector3 = Vector([5.581,-2.136])
-print (vector3.normalize())
+vector1 = Vector([7.887,4.138])
+vector2 = Vector([-8.802,6.776])
 
-vector4 = Vector([1.996,3.108,-4.554])
-print (vector4.normalize())
+print (vector1.inner(vector2))
+
+vector1 = Vector([-5.955,-4.904,-1.874])
+vector2 = Vector([-4.496,-8.755,7.103])
+
+print (vector1.inner(vector2))
+
+vector1 = Vector([3.183,-7.627])
+vector2 = Vector([-2.668,5.319])
+
+print (vector1.angle(vector2))
+
+vector1 = Vector([7.35,0.221,5.188])
+vector2 = Vector([2.751,8.259,3.985])
+
+print (vector1.angle(vector2,True))
