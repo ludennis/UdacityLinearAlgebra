@@ -57,13 +57,31 @@ class Vector(object):
         except ZeroDivisionError:
             raise Exception('Cannot find angle of zero vector')
 
-    def parallel(self,other):
+    def is_parallel(self,other):
         coordinates_divided = [round(v1/v2,3) for v1,v2 in zip(self.coordinates,other.coordinates)]
         return len(set(coordinates_divided)) <= 1
 
-    def orthogonal(self,other):
+    def is_orthogonal(self,other):
         return round(self.inner(other),3) == 0
 
+    def proj_onto(self,basis):
+        return Vector(basis.normalize() * self.inner(basis.normalize())) 
 
-vector1 = Vector([-7.579,-7.88])
-vector2 = Vector([22.737,23.64])
+    def find_perp(self,basis):
+        return Vector(self - self.proj_onto(basis))
+
+
+v = Vector([3.039,1.879])
+b = Vector([0.825,2.036])
+
+print ('v parallel: \n{}'.format(v.proj_onto(b)))
+
+v = Vector([-9.88,-3.264,-8.159])
+b = Vector([-2.155,-9.353,-9.473])
+
+print ('v orthogonal: \n{}'.format(v.find_perp(b)))
+
+v = Vector([3.009,-6.172,3.692,-2.51])
+b = Vector([6.404,-9.144,2.759,8.718])
+
+print ('v = \n{} + \n{}'.format(v.proj_onto(b),v.find_perp(b)))
