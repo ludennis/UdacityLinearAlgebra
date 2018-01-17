@@ -1,11 +1,14 @@
 from math import sqrt,acos,pi
+from decimal import Decimal,getcontext
+
+getcontext().prec=30
 
 class Vector(object):
     def __init__(self, coordinates):
         try:
             if not coordinates:
                 raise ValueError
-            self.coordinates = tuple(coordinates)
+            self.coordinates = tuple([Decimal(x) for x in coordinates])
             self.dimension = len(coordinates)
 
         except ValueError:
@@ -27,7 +30,7 @@ class Vector(object):
         return [v1-v2 for v1,v2 in zip(self.coordinates,other.coordinates)]
 
     def __mul__(self, other):
-        return [other * v for v in self.coordinates]
+        return [Decimal(other) * v for v in self.coordinates]
 
     def magnitude(self):
         return sqrt(sum([x**2 for x in self.coordinates]))
@@ -35,7 +38,7 @@ class Vector(object):
     def normalize(self):
         try:
             mag = self.magnitude()
-            return Vector(self * (1 / mag))
+            return Vector(self * (Decimal(1.0) / Decimal(mag)))
         except ZeroDivisionError:
             raise Exception('Cannot normalize the zero vector')
 
@@ -44,7 +47,9 @@ class Vector(object):
 
     def angle(self,other,degree=False):
         try:
-            angle_in_rad = acos((self.normalize()).inner(other.normalize()))
+            v1 = self.normalize()
+            v2 = other.normalize()
+            angle_in_rad = acos(round(v1.inner(v2),3))
             if degree:
                 return angle_in_rad*180/pi
             else:
@@ -53,10 +58,12 @@ class Vector(object):
             raise Exception('Cannot find angle of zero vector')
 
     def parallel(self,other):
-        return self.normalize() == other.normalize()
+        coordinates_divided = [round(v1/v2,3) for v1,v2 in zip(self.coordinates,other.coordinates)]
+        return len(set(coordinates_divided)) <= 1
+
+    def orthogonal(self,other):
+        return round(self.inner(other),3) == 0
 
 
-vector1 = Vector([3,3])
-vector2 = Vector([6,6])
-
-print (vector1.parallel(vector2))
+vector1 = Vector([-7.579,-7.88])
+vector2 = Vector([22.737,23.64])
