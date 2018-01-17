@@ -52,22 +52,11 @@ class Vector(object):
         except ZeroDivisionError:
             raise Exception('Cannot find angle of zero vector')
 
-vector1 = Vector([7.887,4.138])
-vector2 = Vector([-8.802,6.776])
+    def parallel(self,other):
+        return self.normalize() == other.normalize()
 
-print (vector1.inner(vector2))
 
-vector1 = Vector([-5.955,-4.904,-1.874])
-vector2 = Vector([-4.496,-8.755,7.103])
+vector1 = Vector([3,3])
+vector2 = Vector([6,6])
 
-print (vector1.inner(vector2))
-
-vector1 = Vector([3.183,-7.627])
-vector2 = Vector([-2.668,5.319])
-
-print (vector1.angle(vector2))
-
-vector1 = Vector([7.35,0.221,5.188])
-vector2 = Vector([2.751,8.259,3.985])
-
-print (vector1.angle(vector2,True))
+print (vector1.parallel(vector2))
