@@ -1,4 +1,4 @@
-import math
+from math import sqrt
 class Vector(object):
     def __init__(self, coordinates):
         try:
@@ -29,23 +29,24 @@ class Vector(object):
         return [other * v for v in self.coordinates]
 
     def magnitude(self):
-        sum=0
-        for x in self.coordinates:
-            sum += x*x
-        return math.sqrt(sum)
+        coordinates_squared=[x**2 for x in self.coordinates]
+        return sqrt(sum(coordinates_squared))
 
     def normalize(self):
-        mag = self.magnitude()
-        return [v / mag for v in self.coordinates]
+        try:
+            mag = self.magnitude()
+            return self * (1 / mag)
+        except ZeroDivisionError:
+            raise Exception('Cannot normalize the zero vector')
 
 vector1 = Vector([-0.221,7.437])
-print vector1.magnitude()
+print (vector1.magnitude())
 
 vector2 = Vector([8.813,-1.331,-6.247])
-print vector2.magnitude()
+print (vector2.magnitude())
 
 vector3 = Vector([5.581,-2.136])
-print vector3.normalize()
+print (vector3.normalize())
 
 vector4 = Vector([1.996,3.108,-4.554])
-print vector4.normalize()
+print (vector4.normalize())
