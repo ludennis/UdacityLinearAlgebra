@@ -27,7 +27,8 @@ class LinearSystem(object):
 
 
     def swap_rows(self, row1, row2):
-        pass # add your code here
+        self[row1],self[row2] = self[row2],self[row1]
+        print ('{} swapped with {}'.format(row1,row2))
 
 
     def multiply_coefficient_and_row(self, coefficient, row):
@@ -54,7 +55,6 @@ class LinearSystem(object):
                     raise e
 
         return indices
-
 
     def __len__(self):
         return len(self.planes)
@@ -92,13 +92,17 @@ p3 = Plane(normal_vector=Vector(['1','0','-2']), constant_term='2')
 
 s = LinearSystem([p0,p1,p2,p3])
 
-print s.indices_of_first_nonzero_terms_in_each_row()
-print '{},{},{},{}'.format(s[0],s[1],s[2],s[3])
-print len(s)
-print s
+print(s)
+s.swap_rows(1,2)
+print(s)
 
-s[0] = p1
-print s
+# print (s.indices_of_first_nonzero_terms_in_each_row())
+# print ('{},{},{},{}'.format(s[0],s[1],s[2],s[3]))
+# print (len(s))
+# print (s)
 
-print MyDecimal('1e-9').is_near_zero()
-print MyDecimal('1e-11').is_near_zero()
+# s[0] = p1
+# print (s)
+
+# print (MyDecimal('1e-9').is_near_zero())
+# print (MyDecimal('1e-11').is_near_zero())
