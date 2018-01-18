@@ -88,33 +88,40 @@ class Line(object):
 
         return output
 
+    def is_parallel(self,other):
+        return self.normal_vector.is_parallel(other.normal_vector)
+
+    def is_incidental(self,other):
+        vector_in_between = Vector(self.basepoint - other.basepoint)
+        #check to see if vector in between is orthogonal to both the normal vectors of each
+        if self.is_parallel(other) and vector_in_between.is_orthogonal(self.normal_vector) and vector_in_between.is_orthogonal(other.normal_vector):
+           return True
+        else: return False
 
     def intercept(self,other):
-        # |A|   |c|
-        # |B| x |y| = k1 
-        #   
-        # |C|   |x|
-        # |D| x |y| = k2
-        #
-        # x = (Dk1 - Bk2)/(AD-BC)
-        # y = (-Ck1 + Ak2)/(AD-BC)
-        self_norm,targ_norm=self.normal_vector,other.normal_vector
-
-        A,B,k1 = self_norm[0],self_norm[1],self.constant_term
-        C,D,k2 = targ_norm[0],targ_norm[1],other.constant_term
-
         # check if two normal vectors are parallel
-        if not self_norm.is_parallel(targ_norm):
+        if self.is_parallel(other):
+            print ('Both lines are parallel')
+            if self.is_incidental(other):
+                print ('Both lines are incidental')
+        else:
             #not parallel, need to find intercept
+            # |A|   |c|
+            # |B| x |y| = k1 
+            #   
+            # |C|   |x|
+            # |D| x |y| = k2
+            #
+            # x = (Dk1 - Bk2)/(AD-BC)
+            # y = (-Ck1 + Ak2)/(AD-BC)
+            self_norm,targ_norm=self.normal_vector,other.normal_vector
+
+            A,B,k1 = self_norm[0],self_norm[1],self.constant_term
+            C,D,k2 = targ_norm[0],targ_norm[1],other.constant_term
+
             x = (D * k1 - B * k2) / (A * D - B * C)
             y = (-C * k1 + A * k2) / (A * D - B * C)
             return tuple([x,y])
-        else:
-            return self.is_incident(other)
-
-
-    def is_incident(self,other):
-        return False
 
     @staticmethod
     def first_nonzero_index(iterable):
@@ -134,11 +141,12 @@ line2 = Line(Vector([10.115,7.09]),3.025)
 
 print (line1.intercept(line2))
 
-line1 = Line(Vector([7.204,3.182]),8.68)
-lien2 = Line(Vector([8.172,4.114]),9.883)
+line3 = Line(Vector([7.204,3.182]),8.68)
+line4 = Line(Vector([8.172,4.114]),9.883)
 
-print (line1.intercept(line2))
+print (line3.intercept(line4))
 
+line5 = Line(Vector([1.182,5.562]),6.744)
+line6 = Line(Vector([1.773,8.343]),9.525)
 
-line1 = Line(Vector([1.182,5.562]),6.744)
-line2 = Line(Vector([1.773,8.343]),9.525)
+print (line5.intercept(line6))

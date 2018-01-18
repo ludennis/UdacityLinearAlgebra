@@ -19,6 +19,8 @@ class Vector(object):
 
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
+    def __repr__(self):
+        return 'Vector: {}'.format(self.coordinates)
 
     def __eq__(self, v):
         return self.coordinates == v.coordinates
@@ -72,7 +74,6 @@ class Vector(object):
 
     def find_perp(self,basis):
         return Vector(self - self.proj_onto(basis))
-
 
     def cross_product(self,other):
         a_x,a_y,a_z = self.coordinates
