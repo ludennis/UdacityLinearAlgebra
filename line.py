@@ -92,7 +92,7 @@ class Line(object):
         return self.normal_vector.is_parallel(other.normal_vector)
 
     def is_incidental(self,other):
-        vector_in_between = Vector(self.basepoint - other.basepoint)
+        vector_in_between = self.basepoint - other.basepoint
         #check to see if vector in between is orthogonal to both the normal vectors of each
         if self.is_parallel(other) and vector_in_between.is_orthogonal(self.normal_vector) and vector_in_between.is_orthogonal(other.normal_vector):
            return True

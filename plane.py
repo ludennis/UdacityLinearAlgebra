@@ -43,6 +43,13 @@ class Plane(object):
                 raise e
 
 
+    def is_parallel(self,other):
+        return self.normal_vector.is_parallel(other.normal_vector)
+
+    def __eq__(self,other):
+        vector_in_between = self.basepoint - other.basepoint
+        return vector_in_between.is_orthogonal(self.normal_vector)
+
     def __str__(self):
 
         num_decimal_places = 3
@@ -100,3 +107,20 @@ class Plane(object):
 class MyDecimal(Decimal):
     def is_near_zero(self, eps=1e-10):
         return abs(self) < eps
+
+plane1 = Plane(Vector([-0.412,3.806,0.728]),-3.46)
+plane2 = Plane(Vector([1.03,-9.515,-1.82]),8.65)
+
+print(plane1.is_parallel(plane2))
+print(plane1==plane2)
+
+plane3 = Plane(Vector([2.611,5.528,0.283]),4.6)
+plane4 = Plane(Vector([7.715,8.306,5.342]),3.76)
+
+print(plane3.is_parallel(plane4))
+print(plane3==plane4)
+
+plane5 = Plane(Vector([-7.926,8.625,-7.217]),-7.952)
+plane6 = Plane(Vector([-2.642,2.875,-2.404]),-2.443)
+
+print(plane5.is_parallel(plane6))

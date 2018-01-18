@@ -26,13 +26,13 @@ class Vector(object):
         return self.coordinates == v.coordinates
 
     def __add__(self, other):
-        return [v1+v2 for v1,v2 in zip(self.coordinates,other.coordinates)]
+        return Vector([v1+v2 for v1,v2 in zip(self.coordinates,other.coordinates)])
 
     def __sub__(self, other):
-        return [v1-v2 for v1,v2 in zip(self.coordinates,other.coordinates)]
+        return Vector([v1-v2 for v1,v2 in zip(self.coordinates,other.coordinates)])
 
     def __mul__(self, other):
-        return [Decimal(other) * v for v in self.coordinates]
+        return Vector([Decimal(other) * v for v in self.coordinates])
 
     def __getitem__(self,i):
         return self.coordinates[i]
