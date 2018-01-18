@@ -32,6 +32,9 @@ class Vector(object):
     def __mul__(self, other):
         return [Decimal(other) * v for v in self.coordinates]
 
+    def __getitem__(self,i):
+        return self.coordinates[i]
+
     def magnitude(self):
         return sqrt(sum([x**2 for x in self.coordinates]))
 
@@ -77,18 +80,3 @@ class Vector(object):
         return Vector([a_y*b_z - a_z*b_y,
                        a_z*b_x - a_x*b_z,
                        a_x*b_y - a_y*b_x])
-
-v = Vector([8.462,7.893,-8.187])
-u = Vector([6.984,-5.975,4.778])
-
-print (v.cross_product(u))
-
-v = Vector([-8.987,-9.838,5.031])
-u = Vector([-4.268,-1.861,-8.866])
-
-print ((v.cross_product(u)).magnitude())
-
-v = Vector([1.5,9.547,3.691])
-u = Vector([-6.007,0.124,5.772])
-
-print ((v.cross_product(u)).magnitude()/2.)
