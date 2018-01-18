@@ -48,7 +48,7 @@ class Plane(object):
 
     def __eq__(self,other):
         vector_in_between = self.basepoint - other.basepoint
-        return vector_in_between.is_orthogonal(self.normal_vector)
+        return self.is_parallel(other) and vector_in_between.is_orthogonal(self.normal_vector) and vector_in_between.is_orthogonal(other.normal_vector)
 
     def __str__(self):
 
@@ -111,16 +111,19 @@ class MyDecimal(Decimal):
 plane1 = Plane(Vector([-0.412,3.806,0.728]),-3.46)
 plane2 = Plane(Vector([1.03,-9.515,-1.82]),8.65)
 
-print(plane1.is_parallel(plane2))
 print(plane1==plane2)
+print(plane1.is_parallel(plane2))
+
 
 plane3 = Plane(Vector([2.611,5.528,0.283]),4.6)
 plane4 = Plane(Vector([7.715,8.306,5.342]),3.76)
 
-print(plane3.is_parallel(plane4))
 print(plane3==plane4)
+print(plane3.is_parallel(plane4))
+
 
 plane5 = Plane(Vector([-7.926,8.625,-7.217]),-7.952)
 plane6 = Plane(Vector([-2.642,2.875,-2.404]),-2.443)
 
+print(plane5==plane6)
 print(plane5.is_parallel(plane6))
