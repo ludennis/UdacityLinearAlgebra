@@ -28,11 +28,12 @@ class LinearSystem(object):
 
     def swap_rows(self, row1, row2):
         self[row1],self[row2] = self[row2],self[row1]
-        print ('{} swapped with {}'.format(row1,row2))
+        print('{} swapped with {}'.format(row1,row2))
 
 
     def multiply_coefficient_and_row(self, coefficient, row):
-        pass # add your code here
+        self[row] = Plane(self[row].normal_vector * coefficient,self[row].constant_term*coefficient)
+        print('row {} multiplied with coefficient {}'.format(row,coefficient))
 
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
@@ -95,7 +96,8 @@ s = LinearSystem([p0,p1,p2,p3])
 print(s)
 s.swap_rows(1,2)
 print(s)
-
+s.multiply_coefficient_and_row(3,0)
+print(s)
 # print (s.indices_of_first_nonzero_terms_in_each_row())
 # print ('{},{},{},{}'.format(s[0],s[1],s[2],s[3]))
 # print (len(s))
