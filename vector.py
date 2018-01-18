@@ -71,17 +71,24 @@ class Vector(object):
         return Vector(self - self.proj_onto(basis))
 
 
-v = Vector([3.039,1.879])
-b = Vector([0.825,2.036])
+    def cross_product(self,other):
+        a_x,a_y,a_z = self.coordinates
+        b_x,b_y,b_z = other.coordinates
+        return Vector([a_y*b_z - a_z*b_y,
+                       a_z*b_x - a_x*b_z,
+                       a_x*b_y - a_y*b_x])
 
-print ('v parallel: \n{}'.format(v.proj_onto(b)))
+v = Vector([8.462,7.893,-8.187])
+u = Vector([6.984,-5.975,4.778])
 
-v = Vector([-9.88,-3.264,-8.159])
-b = Vector([-2.155,-9.353,-9.473])
+print (v.cross_product(u))
 
-print ('v orthogonal: \n{}'.format(v.find_perp(b)))
+v = Vector([-8.987,-9.838,5.031])
+u = Vector([-4.268,-1.861,-8.866])
 
-v = Vector([3.009,-6.172,3.692,-2.51])
-b = Vector([6.404,-9.144,2.759,8.718])
+print ((v.cross_product(u)).magnitude())
 
-print ('v = \n{} + \n{}'.format(v.proj_onto(b),v.find_perp(b)))
+v = Vector([1.5,9.547,3.691])
+u = Vector([-6.007,0.124,5.772])
+
+print ((v.cross_product(u)).magnitude()/2.)
