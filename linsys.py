@@ -40,6 +40,7 @@ class LinearSystem(object):
         self[row_to_be_added_to] = \
             Plane(self[row_to_be_added_to].normal_vector + self[row_to_add].normal_vector * coefficient,
                   self[row_to_be_added_to].constant_term + self[row_to_add].constant_term * coefficient)
+        print('row {} multiplied with coefficient {} and added to {}'.format(row_to_add,coefficient,row_to_be_added_to))
 
 
 
