@@ -63,7 +63,7 @@ class Vector(object):
             raise Exception('Cannot find angle of zero vector')
 
     def is_parallel(self,other):
-        coordinates_divided = [round(v1/v2,2) for v1,v2 in zip(self.coordinates,other.coordinates)]
+        coordinates_divided = [round(v1/v2,2) if v2!=0 else 0 for v1,v2 in zip(self.coordinates,other.coordinates)]
         return len(set(coordinates_divided)) <= 1
 
     def is_orthogonal(self,other):
