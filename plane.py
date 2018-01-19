@@ -48,7 +48,9 @@ class Plane(object):
 
     def __eq__(self,other):
         vector_in_between = self.basepoint - other.basepoint
-        return self.is_parallel(other) and vector_in_between.is_orthogonal(self.normal_vector) and vector_in_between.is_orthogonal(other.normal_vector)
+        return True if vector_in_between.is_zero_vector() \
+            else self.is_parallel(other) and vector_in_between.is_orthogonal(self.normal_vector) \
+                                         and vector_in_between.is_orthogonal(other.normal_vector)
 
     def __str__(self):
 
