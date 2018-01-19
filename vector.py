@@ -63,11 +63,17 @@ class Vector(object):
             raise Exception('Cannot find angle of zero vector')
 
     def is_parallel(self,other):
-        coordinates_divided = [round(v1/v2,2) if v2!=0 else 0 for v1,v2 in zip(self.coordinates,other.coordinates)]
-        return len(set(coordinates_divided)) <= 1
+        if self.is_zero_vector() or other.is_zero_vector(): 
+            return True
+        else:
+            coordinates_divided = [round(v1/v2,2) if v2!=0 else 0 for v1,v2 in zip(self.coordinates,other.coordinates)]
+            return len(set(coordinates_divided)) <= 1
 
     def is_orthogonal(self,other):
-        return round(self.inner(other),2) == 0
+        if self.is_zero_vector() or other.is_zero_vector():
+            return True
+        else:
+            return round(self.inner(other),2) == 0
 
     def proj_onto(self,basis):
         return Vector(basis.normalize() * self.inner(basis.normalize())) 
@@ -81,3 +87,8 @@ class Vector(object):
         return Vector([a_y*b_z - a_z*b_y,
                        a_z*b_x - a_x*b_z,
                        a_x*b_y - a_y*b_x])
+
+    def is_zero_vector(self):
+        for v in self.coordinates:
+            if v != 0: return False
+        return True
