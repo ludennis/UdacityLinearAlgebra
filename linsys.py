@@ -88,28 +88,59 @@ class MyDecimal(Decimal):
     def is_near_zero(self, eps=1e-10):
         return abs(self) < eps
 
-
 p0 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
 p1 = Plane(normal_vector=Vector(['0','1','0']), constant_term='2')
 p2 = Plane(normal_vector=Vector(['1','1','-1']), constant_term='3')
 p3 = Plane(normal_vector=Vector(['1','0','-2']), constant_term='2')
 
 s = LinearSystem([p0,p1,p2,p3])
+s.swap_rows(0,1)
+if not (s[0] == p1 and s[1] == p0 and s[2] == p2 and s[3] == p3):
+    print ('test case 1 failed')
 
-print(s)
-s.swap_rows(row1=1,row2=2)
-print(s)
-s.multiply_coefficient_and_row(coefficient=3,row=0)
-print(s)
-s.add_multiple_times_row_to_row(coefficient=2,row_to_add=1,row_to_be_added_to=3)
-print(s)
-# print (s.indices_of_first_nonzero_terms_in_each_row())
-# print ('{},{},{},{}'.format(s[0],s[1],s[2],s[3]))
-# print (len(s))
-# print (s)
+s.swap_rows(1,3)
+if not (s[0] == p1 and s[1] == p3 and s[2] == p2 and s[3] == p0):
+    print ('test case 2 failed')
 
-# s[0] = p1
-# print (s)
+s.swap_rows(3,1)
+if not (s[0] == p1 and s[1] == p0 and s[2] == p2 and s[3] == p3):
+    print ('test case 3 failed')
 
-# print (MyDecimal('1e-9').is_near_zero())
-# print (MyDecimal('1e-11').is_near_zero())
+s.multiply_coefficient_and_row(1,0)
+if not (s[0] == p1 and s[1] == p0 and s[2] == p2 and s[3] == p3):
+    print ('test case 4 failed')
+
+s.multiply_coefficient_and_row(-1,2)
+if not (s[0] == p1 and
+        s[1] == p0 and
+        s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+        s[3] == p3):
+    print ('test case 5 failed')
+
+s.multiply_coefficient_and_row(10,1)
+if not (s[0] == p1 and
+        s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
+        s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+        s[3] == p3):
+    print ('test case 6 failed')
+
+s.add_multiple_times_row_to_row(0,0,1)
+if not (s[0] == p1 and
+        s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
+        s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+        s[3] == p3):
+    print ('test case 7 failed')
+
+s.add_multiple_times_row_to_row(1,0,1)
+if not (s[0] == p1 and
+        s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
+        s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+        s[3] == p3):
+    print ('test case 8 failed')
+
+s.add_multiple_times_row_to_row(-1,1,0)
+if not (s[0] == Plane(normal_vector=Vector(['-10','-10','-10']), constant_term='-10') and
+        s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
+        s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+        s[3] == p3):
+    print ('test case 9 failed')
