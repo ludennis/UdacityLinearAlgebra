@@ -37,7 +37,10 @@ class LinearSystem(object):
 
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
-        pass # add your code here
+        self[row_to_be_added_to] = \
+            Plane(self[row_to_be_added_to].normal_vector + self[row_to_add].normal_vector * coefficient,
+                  self[row_to_be_added_to].constant_term + self[row_to_add].constant_term * coefficient)
+
 
 
     def indices_of_first_nonzero_terms_in_each_row(self):
@@ -94,9 +97,11 @@ p3 = Plane(normal_vector=Vector(['1','0','-2']), constant_term='2')
 s = LinearSystem([p0,p1,p2,p3])
 
 print(s)
-s.swap_rows(1,2)
+s.swap_rows(row1=1,row2=2)
 print(s)
-s.multiply_coefficient_and_row(3,0)
+s.multiply_coefficient_and_row(coefficient=3,row=0)
+print(s)
+s.add_multiple_times_row_to_row(coefficient=2,row_to_add=1,row_to_be_added_to=3)
 print(s)
 # print (s.indices_of_first_nonzero_terms_in_each_row())
 # print ('{},{},{},{}'.format(s[0],s[1],s[2],s[3]))
