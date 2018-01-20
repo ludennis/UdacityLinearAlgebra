@@ -38,7 +38,7 @@ class Plane(object):
 
         except Exception as e:
             if str(e) == Plane.NO_NONZERO_ELTS_FOUND_MSG:
-                self.basepoint = None
+                self.basepoint = Vector(['0']*self.dimension)
             else:
                 raise e
 
