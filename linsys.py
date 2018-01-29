@@ -28,20 +28,19 @@ class LinearSystem(object):
 
     def swap_rows(self, row1, row2):
         self[row1],self[row2] = self[row2],self[row1]
-        print('{} swapped with {}'.format(row1,row2))
+        #print('{} swapped with {}'.format(row1,row2))
 
 
     def multiply_coefficient_and_row(self, coefficient, row):
         self[row] = Plane(self[row].normal_vector * coefficient,self[row].constant_term*coefficient)
-        print('row {} multiplied with coefficient {}'.format(row,coefficient))
+        #print('row {} multiplied with coefficient {}'.format(row,coefficient))
 
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
         self[row_to_be_added_to] = \
             Plane(self[row_to_be_added_to].normal_vector + self[row_to_add].normal_vector * coefficient,
                   self[row_to_be_added_to].constant_term + self[row_to_add].constant_term * coefficient)
-        print('row {} multiplied with coefficient {} and added to {}'.format(row_to_add,coefficient,row_to_be_added_to))
-
+        #print('row {} multiplied with coefficient {} and added to {}'.format(row_to_add,coefficient,row_to_be_added_to))
 
 
     def indices_of_first_nonzero_terms_in_each_row(self):
@@ -85,6 +84,23 @@ class LinearSystem(object):
         return ret
 
     def compute_triangular_form(self):
+        for index,plane in enumerate(self.planes):
+            #print ('index {}, plane {}, dimension {}'.format(index,plane,self.dimension))
+            if index < self.dimension and (plane.normal_vector[index] == 0):
+                #TODO: what if all planes have zeroes?
+                for other_index,other_plane in enumerate(self.planes[index+1:],index+1):
+                    #swap it with another row that has none zero
+                    if other_plane.normal_vector[index] != 0:
+                        self.swap_rows(row1=index,row2=other_index)
+            if plane.normal_vector[index]!=0:
+                #reduce to coefficient of 1 and then reduce other planes
+                self.multiply_coefficient_and_row(coefficient=Decimal(1.0)/plane.normal_vector[index],row=index)
+                #reduce other rows
+                for other_index,other_plane in enumerate(self.planes[index+1:],index+1):
+                    if other_index<self.dimension and other_plane.normal_vector[index]!=0:
+                        #print('other_index {}, other_plane {}'.format(other_index,other_plane))
+                        self.add_multiple_times_row_to_row(coefficient=Decimal(-1.0)/plane.normal_vector[index], 
+                                                           row_to_add=index, row_to_be_added_to=other_index)
         return self
 
 
@@ -100,10 +116,10 @@ t = s.compute_triangular_form()
 if not (t[0] == p1 and
         t[1] == p2):
     print ('test case 1 failed')
-
 p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
 p2 = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
 s = LinearSystem([p1,p2])
+
 t = s.compute_triangular_form()
 if not (t[0] == p1 and
         t[1] == Plane(constant_term='1')):
@@ -114,11 +130,14 @@ p2 = Plane(normal_vector=Vector(['0','1','0']), constant_term='2')
 p3 = Plane(normal_vector=Vector(['1','1','-1']), constant_term='3')
 p4 = Plane(normal_vector=Vector(['1','0','-2']), constant_term='2')
 s = LinearSystem([p1,p2,p3,p4])
+print('s {}'.format(s))
+
 t = s.compute_triangular_form()
 if not (t[0] == p1 and
         t[1] == p2 and
         t[2] == Plane(normal_vector=Vector(['0','0','-2']), constant_term='2') and
         t[3] == Plane()):
+    print('t {}'.format(t))
     print ('test case 3 failed')
 
 p1 = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
