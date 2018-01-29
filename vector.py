@@ -92,3 +92,4 @@ class Vector(object):
         for v in self.coordinates:
             if v != 0: return False
         return True
+        
