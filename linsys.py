@@ -84,23 +84,26 @@ class LinearSystem(object):
         return ret
 
     def compute_triangular_form(self):
-        for index,plane in enumerate(self.planes):
-            #print ('index {}, plane {}, dimension {}'.format(index,plane,self.dimension))
-            if index < self.dimension and (plane.normal_vector[index] == 0):
+        for cur_row in range(0,len(self)):
+            cur_dim = cur_row if cur_row < self.dimension else self.dimension-1
+            #print ('cur_row {}, plane {}, dimension {}'.format(cur_row,plane,self.dimension))
+            if self[cur_row].normal_vector[cur_dim] == 0:
                 #TODO: what if all planes have zeroes?
-                for other_index,other_plane in enumerate(self.planes[index+1:],index+1):
+                for other_row,other_plane in enumerate(self[cur_row+1:],cur_row+1):
                     #swap it with another row that has none zero
-                    if other_plane.normal_vector[index] != 0:
-                        self.swap_rows(row1=index,row2=other_index)
-            if plane.normal_vector[index]!=0:
+                    if other_plane.normal_vector[cur_dim] != 0:
+                        self.swap_rows(row1=cur_row,row2=other_row)
+            else:
+                print('operating on plane {}'.format(self[cur_row]))
                 #reduce to coefficient of 1 and then reduce other planes
-                self.multiply_coefficient_and_row(coefficient=Decimal(1.0)/plane.normal_vector[index],row=index)
+                self.multiply_coefficient_and_row(coefficient=Decimal(1.0)/self[cur_row].normal_vector[cur_dim],row=cur_row)
                 #reduce other rows
-                for other_index,other_plane in enumerate(self.planes[index+1:],index+1):
-                    if other_index<self.dimension and other_plane.normal_vector[index]!=0:
-                        #print('other_index {}, other_plane {}'.format(other_index,other_plane))
-                        self.add_multiple_times_row_to_row(coefficient=Decimal(-1.0)/plane.normal_vector[index], 
-                                                           row_to_add=index, row_to_be_added_to=other_index)
+                for other_row in range(cur_row+1,len(self)):
+                    print ('other_row {}: {}\n'.format(other_row,self[other_row]))
+                    if (self[other_row].normal_vector[cur_dim]!=0):
+                        self.add_multiple_times_row_to_row(coefficient=-1*self[other_row].normal_vector[cur_dim],
+                                                           row_to_add=cur_row,row_to_be_added_to=other_row)
+            print('{}\n'.format(self))
         return self
 
 
@@ -130,14 +133,12 @@ p2 = Plane(normal_vector=Vector(['0','1','0']), constant_term='2')
 p3 = Plane(normal_vector=Vector(['1','1','-1']), constant_term='3')
 p4 = Plane(normal_vector=Vector(['1','0','-2']), constant_term='2')
 s = LinearSystem([p1,p2,p3,p4])
-print('s {}'.format(s))
 
 t = s.compute_triangular_form()
 if not (t[0] == p1 and
         t[1] == p2 and
         t[2] == Plane(normal_vector=Vector(['0','0','-2']), constant_term='2') and
         t[3] == Plane()):
-    print('t {}'.format(t))
     print ('test case 3 failed')
 
 p1 = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
