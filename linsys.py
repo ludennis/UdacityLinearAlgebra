@@ -28,7 +28,7 @@ class LinearSystem(object):
 
     def swap_rows(self, row1, row2):
         self[row1],self[row2] = self[row2],self[row1]
-        #print('{} swapped with {}'.format(row1,row2))
+        # print('{} swapped with {}'.format(row1,row2))
 
 
     def multiply_coefficient_and_row(self, coefficient, row):
@@ -86,24 +86,25 @@ class LinearSystem(object):
     def compute_triangular_form(self):
         for cur_row in range(0,len(self)):
             cur_dim = cur_row if cur_row < self.dimension else self.dimension-1
-            #print ('cur_row {}, plane {}, dimension {}'.format(cur_row,plane,self.dimension))
+            # print ('cur_row {}, plane {}, dimension {}'.format(cur_row,self[cur_row],self.dimension))
+            #swap if leading coefficient of cur_row is 0
+            if self[cur_row].normal_vector.is_zero_vector(): return self
             if self[cur_row].normal_vector[cur_dim] == 0:
-                #TODO: what if all planes have zeroes?
-                for other_row,other_plane in enumerate(self[cur_row+1:],cur_row+1):
-                    #swap it with another row that has none zero
-                    if other_plane.normal_vector[cur_dim] != 0:
+                for other_row in range(cur_row,len(self)):
+                    # print('other_row {}\n'.format(self[other_row]))
+                    if self[other_row].normal_vector[cur_dim] != 0:
                         self.swap_rows(row1=cur_row,row2=other_row)
-            else:
-                print('operating on plane {}'.format(self[cur_row]))
-                #reduce to coefficient of 1 and then reduce other planes
-                self.multiply_coefficient_and_row(coefficient=Decimal(1.0)/self[cur_row].normal_vector[cur_dim],row=cur_row)
-                #reduce other rows
-                for other_row in range(cur_row+1,len(self)):
-                    print ('other_row {}: {}\n'.format(other_row,self[other_row]))
-                    if (self[other_row].normal_vector[cur_dim]!=0):
-                        self.add_multiple_times_row_to_row(coefficient=-1*self[other_row].normal_vector[cur_dim],
-                                                           row_to_add=cur_row,row_to_be_added_to=other_row)
-            print('{}\n'.format(self))
+                        break
+            # print('operating on plane {}'.format(self[cur_row]))
+            #reduce to coefficient of 1 and then reduce other planes
+            self.multiply_coefficient_and_row(coefficient=Decimal(1.0)/self[cur_row].normal_vector[cur_dim],row=cur_row)
+            #reduce other rows
+            for other_row in range(cur_row+1,len(self)):
+                # print ('other_row {}: {}\n'.format(other_row,self[other_row]))
+                if (self[other_row].normal_vector[cur_dim]!=0):
+                    self.add_multiple_times_row_to_row(coefficient=-1*self[other_row].normal_vector[cur_dim],
+                                                       row_to_add=cur_row,row_to_be_added_to=other_row)
+            # print('{}\n'.format(self))
         return self
 
 
@@ -119,10 +120,10 @@ t = s.compute_triangular_form()
 if not (t[0] == p1 and
         t[1] == p2):
     print ('test case 1 failed')
+
 p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
 p2 = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
 s = LinearSystem([p1,p2])
-
 t = s.compute_triangular_form()
 if not (t[0] == p1 and
         t[1] == Plane(constant_term='1')):
