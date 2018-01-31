@@ -89,8 +89,10 @@ class Plane(object):
                 output = '0'
             else:
                 raise e
-
-        constant = round(self.constant_term, num_decimal_places)
+        
+        if MyDecimal(self.constant_term).is_near_zero():
+            constant = 0
+        else: constant = round(self.constant_term, num_decimal_places)
         if constant % 1 == 0:
             constant = int(constant)
         output += ' = {}'.format(constant)

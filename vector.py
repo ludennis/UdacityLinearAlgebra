@@ -19,6 +19,7 @@ class Vector(object):
 
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
+
     def __repr__(self):
         return 'Vector: {}'.format(self.coordinates)
 
@@ -90,6 +91,9 @@ class Vector(object):
 
     def is_zero_vector(self):
         for v in self.coordinates:
-            if v != 0: return False
+            if not MyDecimal(v).is_near_zero(): return False
         return True
-        
+
+class MyDecimal(Decimal):
+    def is_near_zero(self, eps=1e-10):
+        return abs(self) < eps
